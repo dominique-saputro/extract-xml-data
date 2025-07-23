@@ -122,6 +122,7 @@ if st.button('Run') and xml_file and error_file and master_file:
                     updated += 1
                 break  # Found and removed, stop inner loop
     if updated > 0:
+        st.divider()
         st.write("Replace NITKU:")
         st.success(f'Updated {updated} records')
         NSMAP = {'xsi': 'http://www.w3.org/2001/XMLSchema-instance'}
