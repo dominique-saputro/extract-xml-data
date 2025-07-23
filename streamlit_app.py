@@ -3,9 +3,7 @@ import pandas as pd
 from lxml import etree
 from streamlit_gsheets import GSheetsConnection
 
-st.title("Quick Replace XML with GSheet Master")
-
-
+st.title("Coretax Error Wizard")
 xml_file = st.file_uploader("Upload your XML file", type="xml")
 error_file = st.file_uploader("Upload your Excel error file", type=["xls","xlsx"])
 master_type = st.segmented_control(
