@@ -8,11 +8,21 @@ st.title("Quick Replace XML with GSheet Master")
 with st.form('my_form'):
     xml_file = st.file_uploader("Upload your XML file", type="xml")
     error_file = st.file_uploader("Upload your Excel error file", type=["xls","xlsx"])
-    master_link = st.text_input('Google Sheet Link')
+    master_type = st.segmented_control(
+            "Master NITKU",
+            options=['Excel','Google Sheet'],
+            selection_mode="single",
+        )
+    if master_type:
+        match master_type:
+            case 'Excel':
+                master_file = st.file_uploader('Excel File', type=['xlsx'])
+            case 'Google Sheet':
+                master_file = st.text_input('Google Sheet Link')
     submitted = st.form_submit_button('Run')
 
 # Only process data if form is submitted and inputs are non-empty
-if submitted and xml_file and error_file and master_link:
+if submitted and xml_file and error_file and master_file:
     # Read XML File
     xml_bytes = xml_file.read()
     xml_text = xml_bytes.decode('utf-8')
@@ -82,10 +92,16 @@ if submitted and xml_file and error_file and master_link:
      
      
     # For NITKU error : Compare NITKU with master and replace with Master NITKU
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    df_master = conn.read(spreadsheet=master_link,ttl=0)
+    match master_type:
+            case 'Excel':
+                xls = pd.ExcelFile(master_file)
+                df_master = pd.read_excel(master_file, sheet_name=xls.sheet_names[0])
+            case 'Google Sheet':
+                conn = st.connection("gsheets", type=GSheetsConnection)
+                df_master = conn.read(spreadsheet=master_file,ttl=0)
+                
     tin_list = df_nitku.iloc[:, 0].astype(str).str.strip().str.zfill(16)
-    df_master.columns=['nik','nitku','nama','ptkp']
+    df_master.columns=['nik','nitku','nama']
     df_master['nik'] = df_master['nik'].astype(str).str.strip().str.zfill(16)
     updated = 0
     for tin in tin_list:
