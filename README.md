@@ -1,6 +1,6 @@
-# 🎈 Blank app template
+# 🎈 Coretax Error Wizard
 
-A simple Streamlit app template for you to modify!
+Processes uploaded XML data of BP21 based on cortax's error file
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
 
