@@ -81,6 +81,7 @@ if st.button('Run') and xml_file and error_file and master_file:
                 continue
             break 
     if manual_list:
+        st.divider()
         st.write("Manual Input:")
         st.success("Data extracted successfully!")
         dl_excel = pd.DataFrame(manual_list)
