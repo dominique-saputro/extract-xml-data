@@ -124,31 +124,32 @@ if st.button('Run') and xml_file and error_file and master_file:
         st.divider()
         st.write("Replace NITKU:")
         st.success(f'Updated {updated} records')
-        NSMAP = {'xsi': 'http://www.w3.org/2001/XMLSchema-instance'}
-    
-        # Root element with namespace and schema
-        new_root = etree.Element(
-            'Bp21Bulk',
-            nsmap=NSMAP,
-            attrib={
-                '{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation': 'schema.xsd'
-            }
-        )
-        
-        # Add TIN
-        tin_el = etree.SubElement(new_root, 'TIN')
-        tin_el.text = npwp
-
-        # List of Bp21
-        list_of_bp21 = etree.SubElement(new_root, 'ListOfBp21')
-
-        for bp21 in root.xpath(".//Bp21"):
-            list_of_bp21.append(bp21)
-
-        # Convert to XML string
-        tree = etree.ElementTree(new_root)
-        tree.write('bp21_no_nik_nitku_error.xml', pretty_print=True, xml_declaration=True, encoding='UTF-8')
-        with open("bp21_no_nik_nitku_error.xml", "rb") as f:
-            st.download_button("📄 Download XML", f, "bp21_no_nik_nitku_error.xml", mime="application/xml")
     else:
         st.warning("No NITKU records replaced.")   
+    NSMAP = {'xsi': 'http://www.w3.org/2001/XMLSchema-instance'}
+
+    # Root element with namespace and schema
+    new_root = etree.Element(
+        'Bp21Bulk',
+        nsmap=NSMAP,
+        attrib={
+            '{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation': 'schema.xsd'
+        }
+    )
+    
+    # Add TIN
+    tin_el = etree.SubElement(new_root, 'TIN')
+    tin_el.text = npwp
+
+    # List of Bp21
+    list_of_bp21 = etree.SubElement(new_root, 'ListOfBp21')
+
+    for bp21 in root.xpath(".//Bp21"):
+        list_of_bp21.append(bp21)
+
+    # Convert to XML string
+    tree = etree.ElementTree(new_root)
+    tree.write('bp21_no_nik_nitku_error.xml', pretty_print=True, xml_declaration=True, encoding='UTF-8')
+    with open("bp21_no_nik_nitku_error.xml", "rb") as f:
+        st.download_button("📄 Download XML", f, "bp21_no_nik_nitku_error.xml", mime="application/xml")
+        
